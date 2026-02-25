@@ -151,30 +151,31 @@ export default function AddSupplyPage() {
         </div>
 
         <div className={styles.inputRow}>
-          <input
-            className={styles.input}
-            type="number"
-            inputMode="decimal"
-            placeholder="Кол-во продукта или блюда"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            min="0"
-            step="any"
-          />
-          {quantity && (
-            <div className={styles.unitSelector}>
-              <select
-                className={styles.unitSelect}
-                value={unit}
-                onChange={(e) => setUnit(e.target.value)}
-              >
-                {UNITS.map((u) => (
-                  <option key={u} value={u}>{u}</option>
-                ))}
-              </select>
-              <span className={styles.unitArrow}>▾</span>
-            </div>
-          )}
+          <div className={styles.quantityGroup}>
+            <input
+              className={styles.input}
+              type="text"
+              inputMode="decimal"
+              placeholder="Кол-во продукта или блюда"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              style={quantity ? { width: `${quantity.toString().length + 1}ch`, flex: 'none' } : undefined}
+            />
+            {quantity && (
+              <div className={styles.unitSelector}>
+                <select
+                  className={styles.unitSelect}
+                  value={unit}
+                  onChange={(e) => setUnit(e.target.value)}
+                >
+                  {UNITS.map((u) => (
+                    <option key={u} value={u}>{u}</option>
+                  ))}
+                </select>
+                <span className={styles.unitArrow}>▾</span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className={styles.inputRow}>

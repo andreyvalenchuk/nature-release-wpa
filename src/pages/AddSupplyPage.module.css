@@ -160,6 +160,14 @@
   box-shadow: 0 0 0 1px var(--grey);
 }
 
+.quantityGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
 .input {
   flex: 1;
   font: var(--text-body);
