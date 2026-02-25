@@ -17,11 +17,16 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const timeout = setTimeout(() => setLoading(false), 5000)
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      clearTimeout(timeout)
       setUser(currentUser)
       setLoading(false)
     })
-    return unsubscribe
+    return () => {
+      clearTimeout(timeout)
+      unsubscribe()
+    }
   }, [])
 
   const signUp = (email, password, name) =>
