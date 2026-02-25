@@ -1,0 +1,206 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: var(--black);
+  padding-top: env(safe-area-inset-top, 0px);
+  overflow: hidden;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 0 calc(80px + env(safe-area-inset-bottom, 0px)) 0;
+}
+
+/* ─── Loader ─── */
+.loader {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--grey);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: auto;
+  margin-top: 40px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Empty state ─── */
+.emptyWrap {
+  padding: 8px 16px;
+  position: relative;
+}
+
+.emptyText {
+  font: var(--text-small);
+  letter-spacing: var(--ls-small);
+  color: var(--light-grey);
+  max-width: 211px;
+}
+
+.arrow {
+  width: 100%;
+  max-width: 360px;
+  height: 380px;
+  margin-top: 8px;
+}
+
+/* ─── All supplies view ─── */
+.allSupplies {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.categoryGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chapterRow {
+  display: flex;
+  gap: 4px;
+  align-items: baseline;
+  padding: 2px 0;
+}
+
+.chapterName {
+  font: var(--text-chapter-header);
+  color: var(--white);
+}
+
+.chapterCount {
+  font: var(--text-chapter-header);
+  color: var(--light-grey);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 8px;
+  background: var(--dark-grey);
+  border-radius: var(--radius-chip);
+  font: var(--text-small);
+  letter-spacing: var(--ls-small);
+  color: var(--white);
+  transition: opacity 0.15s;
+}
+
+.chip:active {
+  opacity: 0.7;
+}
+
+.chipEmoji {
+  font: 500 17.778px/0.9 var(--font-family);
+}
+
+.chipName {
+  font: var(--text-small);
+  letter-spacing: var(--ls-small);
+}
+
+.chipAdd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: var(--radius-chip);
+  font: var(--text-small);
+  letter-spacing: var(--ls-small);
+  color: var(--light-grey);
+}
+
+.chipAdd:active {
+  opacity: 0.7;
+}
+
+/* ─── Category tab supply list ─── */
+.supplyList {
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.catEmpty {
+  padding: 16px;
+}
+
+/* ─── Create category tab ─── */
+.createCat {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  background: var(--dark-grey);
+  border-radius: var(--radius-card);
+  height: 48px;
+  padding: 8px 8px 8px 16px;
+  gap: 8px;
+}
+
+.catInput {
+  flex: 1;
+  font: var(--text-body);
+  letter-spacing: var(--ls-body);
+  color: var(--white);
+  min-width: 0;
+}
+
+.catInput::placeholder {
+  color: var(--light-grey);
+}
+
+.saveBtn {
+  height: 32px;
+  padding: 0 12px;
+  background: var(--white);
+  border-radius: 10px;
+  font: var(--text-small);
+  letter-spacing: var(--ls-small);
+  color: var(--black);
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.saveBtn:active {
+  opacity: 0.8;
+}
+
+.hint {
+  font: var(--text-small);
+  letter-spacing: var(--ls-small);
+  color: var(--light-grey);
+  line-height: 1.4;
+}
+
+.exampleWord {
+  color: var(--white);
+  font: var(--text-small);
+  font-weight: 500;
+}
+
+.exampleWord:active {
+  opacity: 0.7;
+}

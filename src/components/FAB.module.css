@@ -1,0 +1,25 @@
+.fab {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  right: 16px;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-fab);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.fab:active {
+  transform: scale(0.93);
+  opacity: 0.9;
+}
+
+/* SVG strokes should be dark on white button */
+.fab svg path {
+  stroke: var(--black);
+}

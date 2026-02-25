@@ -1,0 +1,86 @@
+/* Design tokens from Figma */
+:root {
+  --black: #000000;
+  --dark-grey: #181818;
+  --grey: #2f2f2f;
+  --light-grey: #888888;
+  --muted: #8c8c8c;
+  --white: #ffffff;
+
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Typography */
+  --text-page-header: 600 24px/1 var(--font-family);
+  --text-chapter-header: 500 20px/1.2 var(--font-family);
+  --text-big: 500 17.778px/0.9 var(--font-family);
+  --text-body: 400 16px/1 var(--font-family);
+  --text-small: 500 14px/1.2 var(--font-family);
+  --text-subtext: 400 12px/1 var(--font-family);
+
+  /* Letter spacing */
+  --ls-page-header: 0;
+  --ls-big: -0.356px;
+  --ls-body: -0.32px;
+  --ls-small: -0.28px;
+  --ls-subtext: -0.24px;
+
+  /* Border radius */
+  --radius-card: 16px;
+  --radius-chip: 12px;
+  --radius-fab: 18px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Safe area for notch devices */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Scrollbar hide */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Tap highlight remove */
+button, a, input, textarea {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  color: inherit;
+}
+
+input, textarea {
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+}

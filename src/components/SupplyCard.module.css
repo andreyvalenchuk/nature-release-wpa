@@ -1,0 +1,78 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  background: var(--dark-grey);
+  border-radius: var(--radius-card);
+  padding: 8px 8px 8px 12px;
+  flex-shrink: 0;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.emoji {
+  font: 500 17.778px/0.9 var(--font-family);
+  letter-spacing: var(--ls-big);
+  flex-shrink: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.name {
+  font: var(--text-body);
+  letter-spacing: var(--ls-body);
+  color: var(--white);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expiry {
+  font: var(--text-subtext);
+  letter-spacing: var(--ls-subtext);
+  color: var(--light-grey);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expiry.warn {
+  color: #f0a500;
+}
+
+.expiry.expired {
+  color: #e53935;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.qty {
+  font: var(--text-body);
+  letter-spacing: var(--ls-body);
+  color: var(--white);
+}
+
+.unit {
+  font: var(--text-body);
+  letter-spacing: var(--ls-body);
+  color: var(--light-grey);
+}

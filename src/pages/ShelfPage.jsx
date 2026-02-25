@@ -1,0 +1,225 @@
+import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import PageHeader from '../components/PageHeader'
+import NavBar from '../components/NavBar'
+import SupplyCard from '../components/SupplyCard'
+import FAB from '../components/FAB'
+import { useCategories } from '../hooks/useFirestore'
+import { useSupplies } from '../hooks/useFirestore'
+import styles from './ShelfPage.module.css'
+
+const EXAMPLE_CATEGORIES = ['Ягоды', 'Молочка', 'Рыба и Мясо']
+
+// Empty state illustration (squiggly arrow)
+function EmptyState() {
+  return (
+    <div className={styles.emptyWrap}>
+      <p className={styles.emptyText}>
+        На полке ничего нет, но можно добавить запасы по кнопке «+» в правом нижнем углу
+      </p>
+      <svg className={styles.arrow} viewBox="0 0 360 600" fill="none" aria-hidden="true">
+        <path
+          d="M180 20 C 80 120, 300 200, 100 300 C -80 400, 260 480, 340 560"
+          stroke="rgba(255,255,255,0.15)"
+          strokeWidth="1.5"
+          fill="none"
+        />
+        <path
+          d="M325 550 L340 560 L330 545"
+          stroke="rgba(255,255,255,0.15)"
+          strokeWidth="1.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
+  )
+}
+
+function CategoryTabView({ categories, supplies, activeId, onSelectTab }) {
+  // "Все запасы" tab
+  if (activeId === 'all') {
+    if (supplies.length === 0) return <EmptyState />
+
+    // Group by category
+    const grouped = {}
+    categories.forEach((cat) => { grouped[cat.id] = { cat, items: [] } })
+    const uncategorized = []
+
+    supplies.forEach((s) => {
+      if (s.categoryId && grouped[s.categoryId]) {
+        grouped[s.categoryId].items.push(s)
+      } else {
+        uncategorized.push(s)
+      }
+    })
+
+    return (
+      <div className={styles.allSupplies}>
+        {Object.values(grouped).map(({ cat, items }) =>
+          items.length > 0 ? (
+            <div key={cat.id} className={styles.categoryGroup}>
+              <div className={styles.chapterRow}>
+                <span className={styles.chapterName}>{cat.name}</span>
+                <span className={styles.chapterCount}>({items.length})</span>
+              </div>
+              <div className={styles.chips}>
+                {items.map((s) => (
+                  <button
+                    key={s.id}
+                    className={styles.chip}
+                    onClick={() => onSelectTab(cat.id)}
+                  >
+                    {s.emoji && <span className={styles.chipEmoji}>{s.emoji}</span>}
+                    <span className={styles.chipName}>{s.name}</span>
+                  </button>
+                ))}
+                <button className={styles.chipAdd} onClick={() => onSelectTab(cat.id)}>
+                  <span>+</span>
+                  <span>Добавить свой</span>
+                </button>
+              </div>
+            </div>
+          ) : null
+        )}
+        {uncategorized.length > 0 && (
+          <div className={styles.categoryGroup}>
+            <div className={styles.chapterRow}>
+              <span className={styles.chapterName}>Без категории</span>
+              <span className={styles.chapterCount}>({uncategorized.length})</span>
+            </div>
+            {uncategorized.map((s) => (
+              <SupplyCard key={s.id} supply={s} />
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // Category-specific tab — show supply cards
+  const catSupplies = supplies.filter((s) => s.categoryId === activeId)
+  const category = categories.find((c) => c.id === activeId)
+
+  if (catSupplies.length === 0) {
+    return (
+      <div className={styles.catEmpty}>
+        <p className={styles.emptyText}>
+          В категории «{category?.name}» пока нет запасов.
+          Нажмите «+» чтобы добавить.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.supplyList}>
+      {catSupplies.map((s) => (
+        <SupplyCard key={s.id} supply={s} />
+      ))}
+    </div>
+  )
+}
+
+function CreateCategoryTab({ onCreated }) {
+  const [value, setValue] = useState('')
+  const { addCategory } = useCategories()
+  const inputRef = useRef(null)
+
+  const handleExample = (example) => {
+    setValue(example)
+    inputRef.current?.focus()
+  }
+
+  const handleSubmit = async (e) => {
+    e?.preventDefault()
+    const trimmed = value.trim()
+    if (!trimmed) return
+    await addCategory(trimmed)
+    setValue('')
+    onCreated?.()
+  }
+
+  return (
+    <div className={styles.createCat}>
+      <form onSubmit={handleSubmit}>
+        <div className={styles.inputRow}>
+          <input
+            ref={inputRef}
+            className={styles.catInput}
+            type="text"
+            placeholder="Название категории"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            maxLength={40}
+          />
+          {value.trim() && (
+            <button type="submit" className={styles.saveBtn}>
+              Создать
+            </button>
+          )}
+        </div>
+      </form>
+
+      <p className={styles.hint}>
+        Создайте первую категорию на вашей полке. Достаточно лишь придумать и ввести название.
+        Например:{' '}
+        {EXAMPLE_CATEGORIES.map((ex, i) => (
+          <span key={ex}>
+            <button className={styles.exampleWord} onClick={() => handleExample(ex)}>
+              {ex}
+            </button>
+            {i < EXAMPLE_CATEGORIES.length - 1 ? ', ' : '.'}
+          </span>
+        ))}
+      </p>
+    </div>
+  )
+}
+
+export default function ShelfPage() {
+  const navigate = useNavigate()
+  const { categories, loading: catsLoading } = useCategories()
+  const { supplies, loading: suppliesLoading } = useSupplies()
+  const [activeTab, setActiveTab] = useState('all')
+
+  const navItems = [
+    { id: 'all', label: 'Все запасы' },
+    { id: 'create', label: 'Создать категорию' },
+    ...categories.map((c) => ({ id: c.id, label: c.name })),
+  ]
+
+  if (catsLoading || suppliesLoading) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.loader} />
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.page}>
+      <PageHeader title="Полка" subtitle="Дом" />
+      <NavBar
+        items={navItems}
+        activeId={activeTab}
+        onSelect={setActiveTab}
+      />
+
+      <div className={styles.content}>
+        {activeTab === 'create' ? (
+          <CreateCategoryTab onCreated={() => setActiveTab('all')} />
+        ) : (
+          <CategoryTabView
+            categories={categories}
+            supplies={supplies}
+            activeId={activeTab}
+            onSelectTab={setActiveTab}
+          />
+        )}
+      </div>
+
+      <FAB onClick={() => navigate('/add')} />
+    </div>
+  )
+}
