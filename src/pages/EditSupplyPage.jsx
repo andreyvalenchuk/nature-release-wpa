@@ -1,16 +1,20 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import NavBar from '../components/NavBar'
 import EmojiPicker, { UNITS } from '../components/EmojiPicker'
+import { PreviewCard, QuantityRow } from './AddSupplyPage'
 import { useCategories } from '../hooks/useFirestore'
 import { useSupplies } from '../hooks/useFirestore'
 import styles from './SupplyFormPage.module.css'
 
-export default function AddSupplyPage() {
+export default function EditSupplyPage() {
+  const { supplyId } = useParams()
   const navigate = useNavigate()
   const { categories } = useCategories()
-  const { addSupply } = useSupplies()
+  const { supplies, updateSupply, deleteSupply } = useSupplies()
+
+  const supply = supplies.find((s) => s.id === supplyId)
 
   const [emoji, setEmoji] = useState('')
   const [name, setName] = useState('')
@@ -21,17 +25,28 @@ export default function AddSupplyPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  // Pre-fill form when supply loads
+  useEffect(() => {
+    if (!supply) return
+    setEmoji(supply.emoji || '')
+    setName(supply.name || '')
+    setQuantity(supply.quantity != null ? String(supply.quantity) : '')
+    setUnit(supply.unit || 'г')
+    setExpiryDate(supply.expiryDate || '')
+    setCategoryId(supply.categoryId || '')
+  }, [supply?.id])
+
   const navItems = [
     { id: '', label: 'Без категории' },
     ...categories.map((c) => ({ id: c.id, label: c.name })),
   ]
 
-  const handleSubmit = async () => {
+  const handleSave = async () => {
     if (!name.trim()) { setError('Введите название продукта'); return }
     setError('')
     setLoading(true)
     try {
-      await addSupply({
+      await updateSupply(supplyId, {
         emoji: emoji || '📦',
         name: name.trim(),
         quantity: quantity ? parseFloat(quantity) : null,
@@ -39,12 +54,36 @@ export default function AddSupplyPage() {
         expiryDate: expiryDate || null,
         categoryId: categoryId || null,
       })
-      navigate('/')
+      navigate(-1)
     } catch {
       setError('Ошибка при сохранении')
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleDelete = async () => {
+    if (!window.confirm(`Удалить «${name}»?`)) return
+    setLoading(true)
+    try {
+      await deleteSupply(supplyId)
+      navigate('/')
+    } catch {
+      setError('Ошибка при удалении')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!supply) {
+    return (
+      <div className={styles.page}>
+        <PageHeader title="Редактировать" subtitle="Дом" variant="sub" />
+        <p style={{ padding: 16, color: 'var(--light-grey)', font: 'var(--text-small)' }}>
+          Продукт не найден
+        </p>
+      </div>
+    )
   }
 
   const preview = {
@@ -58,7 +97,7 @@ export default function AddSupplyPage() {
   return (
     <div className={styles.page}>
       <div className={styles.topBlock}>
-        <PageHeader title="Добавить запас" subtitle="Дом" variant="sub" />
+        <PageHeader title="Редактировать" subtitle="Дом" variant="sub" />
         <PreviewCard preview={preview} quantity={quantity} expiryDate={expiryDate} />
       </div>
 
@@ -96,65 +135,18 @@ export default function AddSupplyPage() {
       <div className={styles.footer}>
         <button
           className={`${styles.saveBtn} ${name.trim() ? styles.saveBtnActive : ''}`}
-          onClick={handleSubmit}
+          onClick={handleSave}
           disabled={loading}
         >
-          {loading ? '...' : 'Добавить запас'}
+          {loading ? '...' : 'Сохранить изменения'}
         </button>
-      </div>
-    </div>
-  )
-}
-
-// ─── Shared sub-components ────────────────────────────────────────────────────
-
-export function PreviewCard({ preview, quantity, expiryDate }) {
-  return (
-    <div className={styles.previewCard}>
-      <div className={styles.previewLeft}>
-        <span className={styles.previewEmoji}>{preview.emoji}</span>
-        <div className={styles.previewInfo}>
-          <span className={styles.previewName}>{preview.name}</span>
-          <span className={styles.previewSub}>
-            {expiryDate
-              ? new Date(expiryDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
-              : 'Дата истечения срока годности'}
-          </span>
-        </div>
-      </div>
-      <div className={styles.previewCounter}>
-        <span className={styles.previewQty}>{preview.quantity}</span>
-        {quantity && <span className={styles.previewUnit}>{preview.unit}</span>}
-      </div>
-    </div>
-  )
-}
-
-export function QuantityRow({ quantity, setQuantity, unit, setUnit, styles }) {
-  return (
-    <div className={styles.inputRow}>
-      <div className={styles.quantityGroup}>
-        <input
-          className={styles.input}
-          type="text"
-          inputMode="decimal"
-          placeholder="Кол-во продукта или блюда"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          style={quantity ? { width: `${quantity.toString().length + 1}ch`, flex: 'none' } : undefined}
-        />
-        {quantity && (
-          <div className={styles.unitSelector}>
-            <select
-              className={styles.unitSelect}
-              value={unit}
-              onChange={(e) => setUnit(e.target.value)}
-            >
-              {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
-            </select>
-            <span className={styles.unitArrow}>▾</span>
-          </div>
-        )}
+        <button
+          className={styles.deleteBtn}
+          onClick={handleDelete}
+          disabled={loading}
+        >
+          Удалить продукт
+        </button>
       </div>
     </div>
   )

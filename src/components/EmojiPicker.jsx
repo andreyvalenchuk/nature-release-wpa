@@ -1,0 +1,45 @@
+import { useState } from 'react'
+import styles from './EmojiPicker.module.css'
+
+export const FOOD_EMOJIS = [
+  '🥛','🧀','🥚','🧈','🍗','🥩','🐟','🦐',
+  '🫐','🍓','🍇','🍊','🍋','🍎','🍌','🍅',
+  '🥕','🧅','🥔','🧄','🫑','🥦','🌽','🥒',
+  '🍞','🥐','🍚','🥣','🍝','🥫','🧂','🫙',
+  '🍯','☕','🧃','🥤','🫖','🍵','🧊','📦',
+]
+
+export const UNITS = ['г', 'кг', 'мл', 'л', 'шт', 'уп', 'шт.']
+
+export default function EmojiPicker({ value, onChange }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className={styles.wrap}>
+      <button
+        type="button"
+        className={styles.trigger}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <span className={styles.preview}>{value || '👻'}</span>
+        <span className={value ? styles.label : styles.placeholder}>
+          {value ? 'Эмодзи выбран' : 'Выбрать эмодзи для продукта'}
+        </span>
+      </button>
+      {open && (
+        <div className={styles.grid}>
+          {FOOD_EMOJIS.map((em) => (
+            <button
+              key={em}
+              type="button"
+              className={`${styles.btn} ${em === value ? styles.btnActive : ''}`}
+              onClick={() => { onChange(em); setOpen(false) }}
+            >
+              {em}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}

@@ -15,12 +15,13 @@ function formatExpiry(dateStr) {
   return { label: `Истекает через ${diff} дней`, expired: false }
 }
 
-export default function SupplyCard({ supply }) {
+export default function SupplyCard({ supply, onClick }) {
   const { emoji = '📦', name, quantity, unit, expiryDate } = supply
   const expiry = expiryDate ? formatExpiry(expiryDate) : null
+  const Tag = onClick ? 'button' : 'div'
 
   return (
-    <div className={styles.card}>
+    <Tag className={styles.card} onClick={onClick}>
       <div className={styles.left}>
         <span className={styles.emoji}>{emoji}</span>
         <div className={styles.info}>
@@ -38,6 +39,6 @@ export default function SupplyCard({ supply }) {
           {unit && <span className={styles.unit}>{unit}</span>}
         </div>
       )}
-    </div>
+    </Tag>
   )
 }

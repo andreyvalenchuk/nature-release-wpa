@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import ShelfPage from './pages/ShelfPage'
 import AddSupplyPage from './pages/AddSupplyPage'
+import EditSupplyPage from './pages/EditSupplyPage'
 import AuthPage from './pages/AuthPage'
 
 function PrivateRoute({ children }) {
@@ -30,6 +31,14 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <AddSupplyPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/edit/:supplyId"
+        element={
+          <PrivateRoute>
+            <EditSupplyPage />
           </PrivateRoute>
         }
       />

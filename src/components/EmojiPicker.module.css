@@ -1,0 +1,68 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  background: var(--dark-grey);
+  border-radius: var(--radius-card);
+  padding: 8px 16px;
+  width: 100%;
+  box-shadow: 0 0 0 1px transparent;
+  transition: box-shadow 0.15s ease;
+  flex-shrink: 0;
+}
+
+.trigger:focus-visible {
+  box-shadow: 0 0 0 1px var(--grey);
+}
+
+.preview {
+  font: 500 17.778px/0.9 var(--font-family);
+  flex-shrink: 0;
+}
+
+.label {
+  font: 400 16px/1 var(--font-family);
+  letter-spacing: -0.32px;
+  color: var(--white);
+}
+
+.placeholder {
+  font: 400 16px/1 var(--font-family);
+  letter-spacing: -0.32px;
+  color: var(--light-grey);
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: var(--dark-grey);
+  border-radius: var(--radius-card);
+  padding: 12px;
+}
+
+.btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.btn:active {
+  background: var(--grey);
+}
+
+.btnActive {
+  background: var(--grey);
+}

@@ -36,7 +36,7 @@ function EmptyState() {
   )
 }
 
-function CategoryGroup({ name, items }) {
+function CategoryGroup({ name, items, onCardClick }) {
   return (
     <div className={styles.categoryGroup}>
       <div className={styles.chapterRow}>
@@ -45,14 +45,14 @@ function CategoryGroup({ name, items }) {
       </div>
       <div className={styles.supplyList}>
         {items.map((s) => (
-          <SupplyCard key={s.id} supply={s} />
+          <SupplyCard key={s.id} supply={s} onClick={() => onCardClick(s.id)} />
         ))}
       </div>
     </div>
   )
 }
 
-function CategoryTabView({ categories, supplies, activeId }) {
+function CategoryTabView({ categories, supplies, activeId, onCardClick }) {
   // "Все запасы" tab
   if (activeId === 'all') {
     if (supplies.length === 0) return <EmptyState />
@@ -74,11 +74,11 @@ function CategoryTabView({ categories, supplies, activeId }) {
       <div className={styles.allSupplies}>
         {categories.map(({ id, name }) =>
           grouped[id].items.length > 0 ? (
-            <CategoryGroup key={id} name={name} items={grouped[id].items} />
+            <CategoryGroup key={id} name={name} items={grouped[id].items} onCardClick={onCardClick} />
           ) : null
         )}
         {other.length > 0 && (
-          <CategoryGroup name="Другое" items={other} />
+          <CategoryGroup name="Другое" items={other} onCardClick={onCardClick} />
         )}
       </div>
     )
@@ -102,7 +102,7 @@ function CategoryTabView({ categories, supplies, activeId }) {
   return (
     <div className={styles.supplyListPage}>
       {catSupplies.map((s) => (
-        <SupplyCard key={s.id} supply={s} />
+        <SupplyCard key={s.id} supply={s} onClick={() => onCardClick(s.id)} />
       ))}
     </div>
   )
@@ -212,6 +212,7 @@ export default function ShelfPage() {
             categories={categories}
             supplies={supplies}
             activeId={activeTab}
+            onCardClick={(id) => navigate(`/edit/${id}`)}
           />
         )}
       </div>
