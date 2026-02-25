@@ -51,6 +51,8 @@
   font: var(--text-body);
   letter-spacing: var(--ls-body);
   color: var(--white);
+  box-shadow: 0 0 0 1px transparent;
+  transition: box-shadow 0.15s ease;
 }
 
 .input::placeholder {
