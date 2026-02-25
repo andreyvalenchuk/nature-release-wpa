@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import NavBar from '../components/NavBar'
@@ -183,11 +183,22 @@ export default function ShelfPage() {
   const { supplies, loading: suppliesLoading } = useSupplies()
   const [activeTab, setActiveTab] = useState('all')
 
+  const hasCategories = categories.length > 0
+
   const navItems = [
     { id: 'all', label: 'Все запасы' },
-    { id: 'create', label: 'Создать категорию' },
+    ...(!hasCategories ? [{ id: 'create', label: 'Создать категорию' }] : []),
     ...categories.map((c) => ({ id: c.id, label: c.name })),
   ]
+
+  // Если все категории удалены и мы были на одной из них — сброс на 'all'
+  // Если категории появились и мы были на 'create' — сброс на 'all'
+  useEffect(() => {
+    const validIds = new Set(navItems.map((i) => i.id))
+    if (!validIds.has(activeTab)) {
+      setActiveTab('all')
+    }
+  }, [categories])
 
   if (catsLoading || suppliesLoading) {
     return (
