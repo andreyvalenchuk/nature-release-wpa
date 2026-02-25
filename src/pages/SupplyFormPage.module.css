@@ -3,7 +3,7 @@
   flex-direction: column;
   height: 100dvh;
   background: var(--black);
-  padding-top: var(--tg-safe-area-inset-top, env(safe-area-inset-top, 0px));
+  padding-top: max(var(--tg-safe-area-inset-top, env(safe-area-inset-top, 0px)), 16px);
   overflow: hidden;
 }
 
