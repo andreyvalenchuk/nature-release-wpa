@@ -81,57 +81,15 @@
   color: var(--light-grey);
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-}
-
-.chip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 8px;
-  background: var(--dark-grey);
-  border-radius: var(--radius-chip);
-  font: var(--text-small);
-  letter-spacing: var(--ls-small);
-  color: var(--white);
-  transition: opacity 0.15s;
-}
-
-.chip:active {
-  opacity: 0.7;
-}
-
-.chipEmoji {
-  font: 500 17.778px/0.9 var(--font-family);
-}
-
-.chipName {
-  font: var(--text-small);
-  letter-spacing: var(--ls-small);
-}
-
-.chipAdd {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 8px;
-  border-radius: var(--radius-chip);
-  font: var(--text-small);
-  letter-spacing: var(--ls-small);
-  color: var(--light-grey);
-}
-
-.chipAdd:active {
-  opacity: 0.7;
-}
-
-/* ─── Category tab supply list ─── */
+/* ─── Supply list inside a category group or tab ─── */
 .supplyList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ─── Category tab supply list (standalone page) ─── */
+.supplyListPage {
   padding: 8px 16px;
   display: flex;
   flex-direction: column;

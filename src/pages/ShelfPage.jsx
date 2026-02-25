@@ -36,62 +36,49 @@ function EmptyState() {
   )
 }
 
-function CategoryTabView({ categories, supplies, activeId, onSelectTab }) {
+function CategoryGroup({ name, items }) {
+  return (
+    <div className={styles.categoryGroup}>
+      <div className={styles.chapterRow}>
+        <span className={styles.chapterName}>{name}</span>
+        <span className={styles.chapterCount}>({items.length})</span>
+      </div>
+      <div className={styles.supplyList}>
+        {items.map((s) => (
+          <SupplyCard key={s.id} supply={s} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function CategoryTabView({ categories, supplies, activeId }) {
   // "Все запасы" tab
   if (activeId === 'all') {
     if (supplies.length === 0) return <EmptyState />
 
-    // Group by category
+    // Group by category, preserving navbar order
     const grouped = {}
     categories.forEach((cat) => { grouped[cat.id] = { cat, items: [] } })
-    const uncategorized = []
+    const other = []
 
     supplies.forEach((s) => {
       if (s.categoryId && grouped[s.categoryId]) {
         grouped[s.categoryId].items.push(s)
       } else {
-        uncategorized.push(s)
+        other.push(s)
       }
     })
 
     return (
       <div className={styles.allSupplies}>
-        {Object.values(grouped).map(({ cat, items }) =>
-          items.length > 0 ? (
-            <div key={cat.id} className={styles.categoryGroup}>
-              <div className={styles.chapterRow}>
-                <span className={styles.chapterName}>{cat.name}</span>
-                <span className={styles.chapterCount}>({items.length})</span>
-              </div>
-              <div className={styles.chips}>
-                {items.map((s) => (
-                  <button
-                    key={s.id}
-                    className={styles.chip}
-                    onClick={() => onSelectTab(cat.id)}
-                  >
-                    {s.emoji && <span className={styles.chipEmoji}>{s.emoji}</span>}
-                    <span className={styles.chipName}>{s.name}</span>
-                  </button>
-                ))}
-                <button className={styles.chipAdd} onClick={() => onSelectTab(cat.id)}>
-                  <span>+</span>
-                  <span>Добавить свой</span>
-                </button>
-              </div>
-            </div>
+        {categories.map(({ id, name }) =>
+          grouped[id].items.length > 0 ? (
+            <CategoryGroup key={id} name={name} items={grouped[id].items} />
           ) : null
         )}
-        {uncategorized.length > 0 && (
-          <div className={styles.categoryGroup}>
-            <div className={styles.chapterRow}>
-              <span className={styles.chapterName}>Без категории</span>
-              <span className={styles.chapterCount}>({uncategorized.length})</span>
-            </div>
-            {uncategorized.map((s) => (
-              <SupplyCard key={s.id} supply={s} />
-            ))}
-          </div>
+        {other.length > 0 && (
+          <CategoryGroup name="Другое" items={other} />
         )}
       </div>
     )
@@ -113,7 +100,7 @@ function CategoryTabView({ categories, supplies, activeId, onSelectTab }) {
   }
 
   return (
-    <div className={styles.supplyList}>
+    <div className={styles.supplyListPage}>
       {catSupplies.map((s) => (
         <SupplyCard key={s.id} supply={s} />
       ))}
@@ -225,7 +212,6 @@ export default function ShelfPage() {
             categories={categories}
             supplies={supplies}
             activeId={activeTab}
-            onSelectTab={setActiveTab}
           />
         )}
       </div>
