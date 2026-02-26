@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react'
 import styles from './PageHeader.module.css'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
@@ -26,6 +27,7 @@ function BackIcon() {
  * PageHeader — верхняя шапка страницы.
  * variant="main"  — аватар слева, три точки справа (главная страница)
  * variant="sub"   — стрелка назад слева, три точки справа (вложенная страница)
+ * menuItems — Array<{ label, onClick }>, если передан — три точки открывают попап
  */
 export default function PageHeader({
   title = 'Полка',
@@ -33,9 +35,24 @@ export default function PageHeader({
   variant = 'main',
   onBack,
   onMenu,
+  menuItems,
 }) {
   const { user, logOut } = useAuth()
   const navigate = useNavigate()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuWrapRef = useRef(null)
+
+  // Закрываем попап при клике вне его
+  useEffect(() => {
+    if (!menuOpen) return
+    const handler = (e) => {
+      if (menuWrapRef.current && !menuWrapRef.current.contains(e.target)) {
+        setMenuOpen(false)
+      }
+    }
+    document.addEventListener('pointerdown', handler)
+    return () => document.removeEventListener('pointerdown', handler)
+  }, [menuOpen])
 
   const handleBack = () => {
     if (onBack) return onBack()
@@ -43,6 +60,10 @@ export default function PageHeader({
   }
 
   const handleMenu = () => {
+    if (menuItems) {
+      setMenuOpen((v) => !v)
+      return
+    }
     if (onMenu) return onMenu()
     // Default: show logout option
     if (window.confirm('Выйти из аккаунта?')) {
@@ -75,10 +96,28 @@ export default function PageHeader({
         <span className={styles.subtitle}>{subtitle}</span>
       </div>
 
-      {/* Right action */}
-      <button className={styles.actionBtn} onClick={handleMenu} aria-label="Дополнительно">
-        <DotsIcon />
-      </button>
+      {/* Right action + dropdown menu */}
+      <div className={styles.menuWrap} ref={menuWrapRef}>
+        <button className={styles.actionBtn} onClick={handleMenu} aria-label="Дополнительно">
+          <DotsIcon />
+        </button>
+        {menuOpen && menuItems && (
+          <div className={styles.menu}>
+            {menuItems.map((item, i) => (
+              <button
+                key={i}
+                className={styles.menuItem}
+                onClick={() => {
+                  setMenuOpen(false)
+                  item.onClick()
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </header>
   )
 }

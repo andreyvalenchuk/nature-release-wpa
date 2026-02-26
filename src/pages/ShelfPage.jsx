@@ -209,9 +209,17 @@ export default function ShelfPage() {
     )
   }
 
+  const isCategoryTab = activeTab !== 'all' && activeTab !== 'create'
+  const menuItems = isCategoryTab
+    ? [
+        { label: 'Изменить категорию', onClick: () => navigate(`/edit-category/${activeTab}`) },
+        { label: 'История изменений', onClick: () => {} },
+      ]
+    : undefined
+
   return (
     <div className={styles.page}>
-      <PageHeader title="Полка" subtitle="Дом" />
+      <PageHeader title="Полка" subtitle="Дом" menuItems={menuItems} />
       <NavBar
         items={navItems}
         activeId={activeTab}
