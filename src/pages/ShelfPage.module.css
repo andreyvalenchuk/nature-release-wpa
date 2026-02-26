@@ -88,12 +88,41 @@
   gap: 8px;
 }
 
+/* ─── Wide supply list (desktop / tablet) — horizontal scroll ─── */
+.supplyListWide {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.supplyListWide::-webkit-scrollbar {
+  display: none;
+}
+
 /* ─── Category tab supply list (standalone page) ─── */
 .supplyListPage {
   padding: 8px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+/* ─── Wide category tab supply list ─── */
+.supplyListPageWide {
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.supplyListPageWide::-webkit-scrollbar {
+  display: none;
 }
 
 .catEmpty {

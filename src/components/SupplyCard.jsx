@@ -15,10 +15,44 @@ function formatExpiry(dateStr) {
   return { label: `Истекает через ${diff} дней`, expired: false }
 }
 
-export default function SupplyCard({ supply, onClick }) {
+export default function SupplyCard({ supply, onClick, wide }) {
   const { emoji = '📦', name, quantity, unit, expiryDate } = supply
   const expiry = expiryDate ? formatExpiry(expiryDate) : null
   const Tag = onClick ? 'button' : 'div'
+  const expiryClass = `${styles.expiry}${expiry?.expired ? ' ' + styles.expired : expiry?.warn ? ' ' + styles.warn : ''}`
+
+  if (wide) {
+    return (
+      <Tag className={`${styles.card} ${styles.wide}`} onClick={onClick}>
+        <div className={styles.logoname}>
+          <span className={styles.emoji}>{emoji}</span>
+          <div className={styles.info}>
+            <span className={styles.name}>{name}</span>
+            {expiry && <span className={expiryClass}>{expiry.label}</span>}
+          </div>
+        </div>
+        {quantity && (
+          <div className={styles.counterRow}>
+            <div className={styles.counterSide}>
+              <svg width="12" height="2" viewBox="0 0 12 2" fill="none" aria-hidden="true">
+                <line x1="0" y1="1" x2="12" y2="1" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </div>
+            <div className={styles.counterAmount}>
+              <span className={styles.qty}>{quantity}</span>
+              {unit && <span className={styles.unit}>{unit}</span>}
+            </div>
+            <div className={styles.counterSide}>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <line x1="6" y1="0.75" x2="6" y2="11.25" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="0.75" y1="6" x2="11.25" y2="6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </div>
+          </div>
+        )}
+      </Tag>
+    )
+  }
 
   return (
     <Tag className={styles.card} onClick={onClick}>

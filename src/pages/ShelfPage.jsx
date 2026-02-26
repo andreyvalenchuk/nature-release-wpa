@@ -10,6 +10,19 @@ import styles from './ShelfPage.module.css'
 
 const EXAMPLE_CATEGORIES = ['Ягоды', 'Молочка', 'Рыба и Мясо']
 
+function useIsWide() {
+  const [wide, setWide] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches
+  )
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)')
+    const handler = (e) => setWide(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+  return wide
+}
+
 // Empty state illustration (squiggly arrow)
 function EmptyState() {
   return (
@@ -36,23 +49,23 @@ function EmptyState() {
   )
 }
 
-function CategoryGroup({ name, items, onCardClick }) {
+function CategoryGroup({ name, items, onCardClick, wide }) {
   return (
     <div className={styles.categoryGroup}>
       <div className={styles.chapterRow}>
         <span className={styles.chapterName}>{name}</span>
         <span className={styles.chapterCount}>({items.length})</span>
       </div>
-      <div className={styles.supplyList}>
+      <div className={wide ? styles.supplyListWide : styles.supplyList}>
         {items.map((s) => (
-          <SupplyCard key={s.id} supply={s} onClick={() => onCardClick(s.id)} />
+          <SupplyCard key={s.id} supply={s} onClick={() => onCardClick(s.id)} wide={wide} />
         ))}
       </div>
     </div>
   )
 }
 
-function CategoryTabView({ categories, supplies, activeId, onCardClick }) {
+function CategoryTabView({ categories, supplies, activeId, onCardClick, wide }) {
   // "Все запасы" tab
   if (activeId === 'all') {
     if (supplies.length === 0) return <EmptyState />
@@ -74,11 +87,11 @@ function CategoryTabView({ categories, supplies, activeId, onCardClick }) {
       <div className={styles.allSupplies}>
         {categories.map(({ id, name }) =>
           grouped[id].items.length > 0 ? (
-            <CategoryGroup key={id} name={name} items={grouped[id].items} onCardClick={onCardClick} />
+            <CategoryGroup key={id} name={name} items={grouped[id].items} onCardClick={onCardClick} wide={wide} />
           ) : null
         )}
         {other.length > 0 && (
-          <CategoryGroup name="Другое" items={other} onCardClick={onCardClick} />
+          <CategoryGroup name="Другое" items={other} onCardClick={onCardClick} wide={wide} />
         )}
       </div>
     )
@@ -100,9 +113,9 @@ function CategoryTabView({ categories, supplies, activeId, onCardClick }) {
   }
 
   return (
-    <div className={styles.supplyListPage}>
+    <div className={wide ? styles.supplyListPageWide : styles.supplyListPage}>
       {catSupplies.map((s) => (
-        <SupplyCard key={s.id} supply={s} onClick={() => onCardClick(s.id)} />
+        <SupplyCard key={s.id} supply={s} onClick={() => onCardClick(s.id)} wide={wide} />
       ))}
     </div>
   )
@@ -169,6 +182,7 @@ export default function ShelfPage() {
   const { categories, loading: catsLoading } = useCategories()
   const { supplies, loading: suppliesLoading } = useSupplies()
   const [activeTab, setActiveTab] = useState('all')
+  const isWide = useIsWide()
 
   const hasCategories = categories.length > 0
 
@@ -213,6 +227,7 @@ export default function ShelfPage() {
             supplies={supplies}
             activeId={activeTab}
             onCardClick={(id) => navigate(`/edit/${id}`)}
+            wide={isWide}
           />
         )}
       </div>
