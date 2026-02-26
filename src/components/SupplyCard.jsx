@@ -58,7 +58,7 @@ export default function SupplyCard({ supply, onClick, wide, onQuantityChange }) 
       if (!isNumeric || localQty <= 0) return
       const newQty = localQty - 1
       setLocalQty(newQty)
-      setAnimDir('down')
+      setAnimDir('up')
       setAnimKey((k) => k + 1)
       isPendingRef.current = true
       clearTimeout(debounceRef.current)
@@ -76,7 +76,7 @@ export default function SupplyCard({ supply, onClick, wide, onQuantityChange }) 
       if (!isNumeric) return
       const newQty = localQty + 1
       setLocalQty(newQty)
-      setAnimDir('up')
+      setAnimDir('down')
       setAnimKey((k) => k + 1)
       isPendingRef.current = true
       clearTimeout(debounceRef.current)
