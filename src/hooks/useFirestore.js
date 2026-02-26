@@ -40,12 +40,17 @@ export function useCategories() {
     })
   }
 
+  const updateCategory = (id, name) => {
+    if (!user) return
+    return updateDoc(doc(db, 'users', user.uid, 'categories', id), { name })
+  }
+
   const deleteCategory = (id) => {
     if (!user) return
     return deleteDoc(doc(db, 'users', user.uid, 'categories', id))
   }
 
-  return { categories, loading, addCategory, deleteCategory }
+  return { categories, loading, addCategory, updateCategory, deleteCategory }
 }
 
 // Hook for supplies

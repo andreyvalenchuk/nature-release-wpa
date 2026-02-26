@@ -1,0 +1,82 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: var(--black);
+  padding-top: max(var(--tg-safe-area-inset-top, env(safe-area-inset-top, 0px)), 16px);
+  overflow: hidden;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  background: var(--dark-grey);
+  border-radius: var(--radius-card);
+  height: 48px;
+  padding: 8px 16px;
+  box-shadow: 0 0 0 1px transparent;
+  transition: box-shadow 0.15s ease;
+}
+
+.inputRow:focus-within {
+  box-shadow: 0 0 0 1px var(--grey);
+}
+
+.catInput {
+  flex: 1;
+  font: var(--text-body);
+  letter-spacing: var(--ls-body);
+  color: var(--white);
+  min-width: 0;
+}
+
+.catInput::placeholder {
+  color: var(--light-grey);
+}
+
+.sectionLabel {
+  font: var(--text-big);
+  letter-spacing: var(--ls-big);
+  color: var(--light-grey);
+  padding: 4px 0 0;
+}
+
+.supplyList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer {
+  flex-shrink: 0;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+}
+
+.saveBtn {
+  width: 100%;
+  height: 48px;
+  background: var(--white);
+  border-radius: var(--radius-card);
+  font: var(--text-big);
+  letter-spacing: var(--ls-big);
+  color: var(--dark-grey);
+  transition: opacity 0.15s;
+}
+
+.saveBtn:active {
+  opacity: 0.8;
+}
+
+.saveBtn:disabled {
+  opacity: 0.4;
+}

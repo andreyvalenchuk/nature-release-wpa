@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import ShelfPage from './pages/ShelfPage'
 import AddSupplyPage from './pages/AddSupplyPage'
 import EditSupplyPage from './pages/EditSupplyPage'
+import EditCategoryPage from './pages/EditCategoryPage'
 import AuthPage from './pages/AuthPage'
 
 function PrivateRoute({ children }) {
@@ -39,6 +40,14 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <EditSupplyPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/edit-category/:categoryId"
+        element={
+          <PrivateRoute>
+            <EditCategoryPage />
           </PrivateRoute>
         }
       />

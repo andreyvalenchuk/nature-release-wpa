@@ -216,6 +216,11 @@ export default function ShelfPage() {
         items={navItems}
         activeId={activeTab}
         onSelect={setActiveTab}
+        onLongPress={(id) => {
+          if (id !== 'all' && id !== 'create') {
+            navigate(`/edit-category/${id}`)
+          }
+        }}
       />
 
       <div className={styles.content}>
