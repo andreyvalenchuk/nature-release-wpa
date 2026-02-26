@@ -118,6 +118,25 @@ button.card:active {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  height: 100%;
+  border-radius: 8px;
+  transition: background 0.12s;
+  user-select: none;
+}
+
+.counterSide:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.counterSide:active {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.counterSideDim {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
 }
 
 .counterAmount {
@@ -125,4 +144,32 @@ button.card:active {
   align-items: center;
   gap: 2px;
   flex-shrink: 0;
+}
+
+/* ─── Rolling number animation ─── */
+
+.qtyViewport {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+@keyframes rollInFromBottom {
+  from { transform: translateY(110%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes rollInFromTop {
+  from { transform: translateY(-110%); }
+  to   { transform: translateY(0); }
+}
+
+.animUp {
+  display: inline-block;
+  animation: rollInFromBottom 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animDown {
+  display: inline-block;
+  animation: rollInFromTop 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }

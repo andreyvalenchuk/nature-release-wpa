@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import NavBar from '../components/NavBar'
@@ -49,7 +49,7 @@ function EmptyState() {
   )
 }
 
-function CategoryGroup({ name, items, onCardClick, wide }) {
+function CategoryGroup({ name, items, onCardClick, wide, onQuantityChange }) {
   return (
     <div className={styles.categoryGroup}>
       <div className={styles.chapterRow}>
@@ -58,14 +58,14 @@ function CategoryGroup({ name, items, onCardClick, wide }) {
       </div>
       <div className={wide ? styles.supplyListWide : styles.supplyList}>
         {items.map((s) => (
-          <SupplyCard key={s.id} supply={s} onClick={() => onCardClick(s.id)} wide={wide} />
+          <SupplyCard key={s.id} supply={s} onClick={() => onCardClick(s.id)} wide={wide} onQuantityChange={onQuantityChange} />
         ))}
       </div>
     </div>
   )
 }
 
-function CategoryTabView({ categories, supplies, activeId, onCardClick, wide }) {
+function CategoryTabView({ categories, supplies, activeId, onCardClick, wide, onQuantityChange }) {
   // "Все запасы" tab
   if (activeId === 'all') {
     if (supplies.length === 0) return <EmptyState />
@@ -87,11 +87,11 @@ function CategoryTabView({ categories, supplies, activeId, onCardClick, wide }) 
       <div className={styles.allSupplies}>
         {categories.map(({ id, name }) =>
           grouped[id].items.length > 0 ? (
-            <CategoryGroup key={id} name={name} items={grouped[id].items} onCardClick={onCardClick} wide={wide} />
+            <CategoryGroup key={id} name={name} items={grouped[id].items} onCardClick={onCardClick} wide={wide} onQuantityChange={onQuantityChange} />
           ) : null
         )}
         {other.length > 0 && (
-          <CategoryGroup name="Другое" items={other} onCardClick={onCardClick} wide={wide} />
+          <CategoryGroup name="Другое" items={other} onCardClick={onCardClick} wide={wide} onQuantityChange={onQuantityChange} />
         )}
       </div>
     )
@@ -115,7 +115,7 @@ function CategoryTabView({ categories, supplies, activeId, onCardClick, wide }) 
   return (
     <div className={wide ? styles.supplyListPageWide : styles.supplyListPage}>
       {catSupplies.map((s) => (
-        <SupplyCard key={s.id} supply={s} onClick={() => onCardClick(s.id)} wide={wide} />
+        <SupplyCard key={s.id} supply={s} onClick={() => onCardClick(s.id)} wide={wide} onQuantityChange={onQuantityChange} />
       ))}
     </div>
   )
@@ -180,7 +180,11 @@ function CreateCategoryTab({ onCreated }) {
 export default function ShelfPage() {
   const navigate = useNavigate()
   const { categories, loading: catsLoading } = useCategories()
-  const { supplies, loading: suppliesLoading } = useSupplies()
+  const { supplies, loading: suppliesLoading, updateSupply } = useSupplies()
+
+  const handleQuantityChange = useCallback((id, newQty) => {
+    updateSupply(id, { quantity: newQty })
+  }, [updateSupply])
   const [activeTab, setActiveTab] = useState('all')
   const isWide = useIsWide()
 
@@ -241,6 +245,7 @@ export default function ShelfPage() {
             activeId={activeTab}
             onCardClick={(id) => navigate(`/edit/${id}`)}
             wide={isWide}
+            onQuantityChange={handleQuantityChange}
           />
         )}
       </div>
