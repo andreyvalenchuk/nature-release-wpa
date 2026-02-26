@@ -27,9 +27,6 @@
   transition: background 0.15s ease;
 }
 
-.tab:active {
-  opacity: 0.7;
-}
 
 .active {
   background: var(--grey);

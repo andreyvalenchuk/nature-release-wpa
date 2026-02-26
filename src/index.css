@@ -65,8 +65,11 @@ html, body {
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* Tap highlight remove */
-button, a, input, textarea {
+* {
   -webkit-tap-highlight-color: transparent;
+}
+
+button, a, input, textarea {
   outline: none;
 }
 
