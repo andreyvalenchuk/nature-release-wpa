@@ -80,3 +80,56 @@
 .saveBtn:disabled {
   opacity: 0.4;
 }
+
+.deleteBtn {
+  width: 100%;
+  height: 40px;
+  margin-top: 4px;
+  font: var(--text-body);
+  letter-spacing: var(--ls-body);
+  color: #e53935;
+  transition: opacity 0.15s;
+}
+
+.deleteBtn:active {
+  opacity: 0.6;
+}
+
+.confirmRow {
+  display: flex;
+  gap: 8px;
+}
+
+.cancelBtn {
+  flex: 1;
+  height: 48px;
+  background: var(--dark-grey);
+  border-radius: var(--radius-card);
+  font: var(--text-big);
+  letter-spacing: var(--ls-big);
+  color: var(--white);
+  transition: opacity 0.15s;
+}
+
+.cancelBtn:active {
+  opacity: 0.7;
+}
+
+.confirmDeleteBtn {
+  flex: 1;
+  height: 48px;
+  background: #e53935;
+  border-radius: var(--radius-card);
+  font: var(--text-big);
+  letter-spacing: var(--ls-big);
+  color: var(--white);
+  transition: opacity 0.15s;
+}
+
+.confirmDeleteBtn:active {
+  opacity: 0.7;
+}
+
+.confirmDeleteBtn:disabled {
+  opacity: 0.5;
+}

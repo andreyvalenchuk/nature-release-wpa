@@ -9,12 +9,14 @@ import styles from './EditCategoryPage.module.css'
 export default function EditCategoryPage() {
   const { categoryId } = useParams()
   const navigate = useNavigate()
-  const { categories, updateCategory } = useCategories()
+  const { categories, updateCategory, deleteCategory } = useCategories()
   const { supplies, deleteSupply } = useSupplies()
 
   const category = categories.find((c) => c.id === categoryId)
   const [name, setName] = useState(category?.name || '')
   const [saving, setSaving] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     if (category) setName(category.name)
@@ -25,6 +27,16 @@ export default function EditCategoryPage() {
   const handleDeleteSupply = async (supply) => {
     if (!window.confirm(`Удалить «${supply.name}»?`)) return
     await deleteSupply(supply.id)
+  }
+
+  const handleDelete = async () => {
+    setDeleting(true)
+    try {
+      await deleteCategory(categoryId)
+      navigate(-1)
+    } finally {
+      setDeleting(false)
+    }
   }
 
   const handleSave = async () => {
@@ -81,13 +93,29 @@ export default function EditCategoryPage() {
       </div>
 
       <div className={styles.footer}>
-        <button
-          className={styles.saveBtn}
-          onClick={handleSave}
-          disabled={saving || !name.trim()}
-        >
-          {saving ? '...' : 'Сохранить'}
-        </button>
+        {confirmDelete ? (
+          <div className={styles.confirmRow}>
+            <button className={styles.cancelBtn} onClick={() => setConfirmDelete(false)}>
+              Отмена
+            </button>
+            <button className={styles.confirmDeleteBtn} onClick={handleDelete} disabled={deleting}>
+              {deleting ? '...' : 'Удалить'}
+            </button>
+          </div>
+        ) : (
+          <>
+            <button
+              className={styles.saveBtn}
+              onClick={handleSave}
+              disabled={saving || !name.trim()}
+            >
+              {saving ? '...' : 'Сохранить'}
+            </button>
+            <button className={styles.deleteBtn} onClick={() => setConfirmDelete(true)}>
+              Удалить категорию
+            </button>
+          </>
+        )}
       </div>
     </div>
   )
