@@ -66,3 +66,19 @@
 .btnActive {
   background: var(--grey);
 }
+
+.unitBtn {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font: var(--text-small);
+  letter-spacing: var(--ls-small);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.unitBtnActive {
+  background: var(--grey);
+}

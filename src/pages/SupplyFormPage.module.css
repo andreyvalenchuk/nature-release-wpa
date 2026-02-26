@@ -160,14 +160,6 @@
   box-shadow: 0 0 0 1px var(--grey);
 }
 
-.quantityGroup {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex: 1;
-  min-width: 0;
-}
-
 .input {
   flex: 1;
   font: var(--text-body);
@@ -195,31 +187,6 @@
   font: var(--text-body);
   letter-spacing: var(--ls-body);
   color: var(--light-grey);
-}
-
-.unitSelector {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex-shrink: 0;
-  position: relative;
-}
-
-.unitSelect {
-  appearance: none;
-  background: transparent;
-  font: var(--text-small);
-  color: var(--light-grey);
-  padding-right: 14px;
-  cursor: pointer;
-}
-
-.unitArrow {
-  font-size: 10px;
-  color: var(--light-grey);
-  pointer-events: none;
-  position: absolute;
-  right: 0;
 }
 
 .error {

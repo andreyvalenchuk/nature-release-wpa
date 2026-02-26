@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import NavBar from '../components/NavBar'
-import EmojiPicker, { UNITS } from '../components/EmojiPicker'
+import EmojiPicker, { UnitPicker } from '../components/EmojiPicker'
 import { useCategories } from '../hooks/useFirestore'
 import { useSupplies } from '../hooks/useFirestore'
 import styles from './SupplyFormPage.module.css'
@@ -132,8 +132,8 @@ export function PreviewCard({ preview, quantity, expiryDate }) {
 
 export function QuantityRow({ quantity, setQuantity, unit, setUnit, styles }) {
   return (
-    <div className={styles.inputRow}>
-      <div className={styles.quantityGroup}>
+    <>
+      <div className={styles.inputRow}>
         <input
           className={styles.input}
           type="text"
@@ -141,21 +141,9 @@ export function QuantityRow({ quantity, setQuantity, unit, setUnit, styles }) {
           placeholder="Кол-во продукта или блюда"
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
-          style={quantity ? { width: `${quantity.toString().length + 1}ch`, flex: 'none' } : undefined}
         />
-        {quantity && (
-          <div className={styles.unitSelector}>
-            <select
-              className={styles.unitSelect}
-              value={unit}
-              onChange={(e) => setUnit(e.target.value)}
-            >
-              {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
-            </select>
-            <span className={styles.unitArrow}>▾</span>
-          </div>
-        )}
       </div>
-    </div>
+      {quantity && <UnitPicker value={unit} onChange={setUnit} />}
+    </>
   )
 }
