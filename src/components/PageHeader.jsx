@@ -14,6 +14,25 @@ function DotsIcon() {
   )
 }
 
+function EditIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="M8.5 1.5L10.5 3.5L3.5 10.5H1.5V8.5L8.5 1.5Z" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function AddIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <line x1="6" y1="0.75" x2="6" y2="11.25" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="0.75" y1="6" x2="11.25" y2="6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+const MENU_ICONS = { edit: EditIcon, add: AddIcon }
+
 // Back arrow icon
 function BackIcon() {
   return (
@@ -103,18 +122,22 @@ export default function PageHeader({
         </button>
         {menuOpen && menuItems && (
           <div className={styles.menu}>
-            {menuItems.map((item, i) => (
-              <button
-                key={i}
-                className={styles.menuItem}
-                onClick={() => {
-                  setMenuOpen(false)
-                  item.onClick()
-                }}
-              >
-                {item.label}
-              </button>
-            ))}
+            {menuItems.map((item, i) => {
+              const Icon = item.icon ? MENU_ICONS[item.icon] : null
+              return (
+                <button
+                  key={i}
+                  className={styles.menuItem}
+                  onClick={() => {
+                    setMenuOpen(false)
+                    item.onClick()
+                  }}
+                >
+                  {Icon && <span className={styles.menuIcon}><Icon /></span>}
+                  {item.label}
+                </button>
+              )
+            })}
           </div>
         )}
       </div>

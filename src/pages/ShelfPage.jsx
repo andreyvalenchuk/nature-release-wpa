@@ -192,7 +192,7 @@ export default function ShelfPage() {
 
   const navItems = [
     { id: 'all', label: 'Все запасы' },
-    ...(!hasCategories ? [{ id: 'create', label: 'Создать категорию' }] : []),
+    ...(!hasCategories || activeTab === 'create' ? [{ id: 'create', label: 'Создать категорию' }] : []),
     ...categories.map((c) => ({ id: c.id, label: c.name })),
   ]
 
@@ -216,10 +216,12 @@ export default function ShelfPage() {
   const isCategoryTab = activeTab !== 'all' && activeTab !== 'create'
   const menuItems = isCategoryTab
     ? [
-        { label: 'Изменить категорию', onClick: () => navigate(`/edit-category/${activeTab}`) },
-        { label: 'История изменений', onClick: () => {} },
+        { label: 'Изменить категорию', icon: 'edit', onClick: () => navigate(`/edit-category/${activeTab}`) },
+        { label: 'Создать категорию', icon: 'add', onClick: () => setActiveTab('create') },
       ]
-    : undefined
+    : [
+        { label: 'Создать категорию', icon: 'add', onClick: () => setActiveTab('create') },
+      ]
 
   return (
     <div className={styles.page}>
