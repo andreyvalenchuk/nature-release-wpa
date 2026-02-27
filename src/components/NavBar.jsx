@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import styles from './NavBar.module.css'
 
 /**
@@ -11,6 +11,18 @@ import styles from './NavBar.module.css'
 export default function NavBar({ items, activeId, onSelect, onLongPress }) {
   const pressTimer = useRef(null)
   const didLongPress = useRef(false)
+  const barRef = useRef(null)
+  const [overflowing, setOverflowing] = useState(false)
+
+  useEffect(() => {
+    const bar = barRef.current
+    if (!bar) return
+    const ro = new ResizeObserver(() => {
+      setOverflowing(bar.scrollWidth > bar.offsetWidth)
+    })
+    ro.observe(bar)
+    return () => ro.disconnect()
+  }, [items])
 
   const startPress = (id) => {
     didLongPress.current = false
@@ -31,7 +43,7 @@ export default function NavBar({ items, activeId, onSelect, onLongPress }) {
 
   return (
     <nav className={styles.nav} aria-label="Навигация">
-      <div className={`${styles.bar} no-scrollbar`}>
+      <div ref={barRef} className={`${styles.bar} ${overflowing ? styles.overflowing : ''} no-scrollbar`}>
         {items.map((item) => (
           <button
             key={item.id}

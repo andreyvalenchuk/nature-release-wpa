@@ -31,3 +31,7 @@
 .active {
   background: var(--grey);
 }
+
+.overflowing .tab {
+  padding: 0 8px;
+}
